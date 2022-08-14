@@ -1,11 +1,27 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { LocalAuthGuard } from 'src/auth/local.auth.guard';
+import { AuthService } from '../auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService
+  ) { }
 
   @Post('signup')
   async create(
@@ -23,14 +39,26 @@ export class UsersController {
     }
   }
 
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
+  login(@Request() req): any {
+    return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('protected')
+  sayHi(@Request() req): any{
+    return req.user
+  }
+
   @Get()
   async getUsers() {
     return this.usersService.getUsers();
   }
 
-  @Get(':id')
-  async getUser(@Param('id') id: string) {
-    return this.usersService.getUser(id);
+  @Get(':username')
+  async getUser(@Param('username') username: string) {
+    return this.usersService.getUser(username);
   }
 
   @Put(':id')

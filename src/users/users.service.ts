@@ -28,7 +28,12 @@ export class UsersService {
       .catch((err) => console.log(err));
   }
 
-  async getUser(id: string): Promise<CreateUserDto> {
+  async getUser(userName: string): Promise<CreateUserDto> {
+    const username = userName.toLowerCase();
+    return this.userModel.findOne({username});
+  }
+
+  async findUser(id: string): Promise<CreateUserDto> {
     return this.userModel.findById(id);
   }
 
