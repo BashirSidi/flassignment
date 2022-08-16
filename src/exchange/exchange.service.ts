@@ -12,7 +12,7 @@ export class ExchangeService {
     @InjectModel('exchange') private readonly exchangeModel: Model<ExchangeDocument>
   ){}
 
-  async create(createExchangeDto: CreateExchangeDto): Promise<CreateExchangeDto> { 
+  async create(createExchangeDto: CreateExchangeDto): Promise<any> { 
     const newExchange = new this.exchangeModel({
       base: createExchangeDto.base.toLocaleUpperCase(),
       ...createExchangeDto
@@ -21,7 +21,7 @@ export class ExchangeService {
     return newExchange;
   }
 
-  async addExchangeRate(baseCurrency: string, addRateExchangeDto: AddRateExchangeDto): Promise<CreateExchangeDto> {
+  async addExchangeRate(baseCurrency: string, addRateExchangeDto: AddRateExchangeDto): Promise<any> {
     const base = baseCurrency.toUpperCase();
     let exchangeData = await this.exchangeModel.findOne({ base });
     if (!exchangeData) {

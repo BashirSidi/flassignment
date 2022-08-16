@@ -29,8 +29,10 @@
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^6.0.5",
     "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.0.1",
+    "cross-env": "^7.0.3",
     "mongoose": "^6.5.2",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
@@ -76,7 +78,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "*/.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

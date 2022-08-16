@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class ConvertExchangeDto {
+export class RequestExchangeDto {
   @ApiProperty()
-  amount: number
+  rate: number
 }

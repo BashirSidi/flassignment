@@ -4,7 +4,10 @@ import { CreateExchangeDto } from './dto/create-exchange.dto';
 import { AddRateExchangeDto } from './dto/add-rate-exchange.dto';
 import { ConvertExchangeDto } from './dto/convert-exchange.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { RequestExchangeDto } from './dto/request-rate.dto';
 
+@ApiTags('exchanges')
 @Controller('exchange')
 export class ExchangeController {
   constructor(private readonly exchangeService: ExchangeService) {}
@@ -33,6 +36,7 @@ export class ExchangeController {
     }
   }
 
+  @ApiOkResponse({type: ConvertExchangeDto})
   @UseGuards(JwtAuthGuard)
   @Get('convert/:base/:target')
   async convertExchangeRate(
@@ -52,6 +56,7 @@ export class ExchangeController {
     }
   }
 
+  @ApiOkResponse({type: RequestExchangeDto})
   @UseGuards(JwtAuthGuard)
   @Get('request/:base/:target')
   async requestExchangeRate(
