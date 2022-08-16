@@ -50,20 +50,10 @@ export class ExchangeService {
     targetCurrency: string,
     convertExchangeDto: ConvertExchangeDto): Promise<any>
   {
-  const base = baseCurrency;
-  let data = await this.exchangeModel.findOne({ base })
-
-  if (!data) {
-    throw new BadRequestException('Unknown base currency value');
-  }
-
-  let obj = data.rates.find(r => r.target === targetCurrency);
-
-  if (!obj) {
-    throw new BadRequestException('Unknown target currency value');
-  }
     
-  return Number(obj.rate) * Number(convertExchangeDto.amount);
+  const rate = await this.requestExchangeRate(baseCurrency, targetCurrency)
+    
+  return Number(rate) * Number(convertExchangeDto.amount);
 
 }
 
@@ -83,21 +73,6 @@ export class ExchangeService {
     
     return obj.rate;
 
-}
-
-  findAll() {
-    return `This action returns all exchange`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} exchange`;
-  }
-
-  update(id: string, addRateExchangeDto: AddRateExchangeDto) {
-    return `This action updates a #${id} exchange`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} exchange`;
-  }
 }

@@ -1,13 +1,15 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { ExchangeService } from './exchange.service';
 import { CreateExchangeDto } from './dto/create-exchange.dto';
 import { AddRateExchangeDto } from './dto/add-rate-exchange.dto';
 import { ConvertExchangeDto } from './dto/convert-exchange.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('exchange')
 export class ExchangeController {
   constructor(private readonly exchangeService: ExchangeService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Body() createExchange: CreateExchangeDto) {
     const result = await this.exchangeService.create(createExchange);
@@ -18,20 +20,22 @@ export class ExchangeController {
     }
   }
 
-  @Put(':base/addrate')
+  @UseGuards(JwtAuthGuard)
+  @Put('addrate/:base')
   async addExchangeRate(
     @Param('base') base: string,
     @Body() addRateExchangeDto: AddRateExchangeDto
   ) {
     const result = await this.exchangeService.addExchangeRate(base, addRateExchangeDto);
     return {
-      msg: `Exchange rate between ${base} and ${addRateExchangeDto.target} created!`,
+      msg: `Rate between ${base.toLocaleUpperCase()} to ${addRateExchangeDto.target.toLocaleUpperCase()}`,
       result: result
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('convert/:base/:target')
-  async requestExchangeRate(
+  async convertExchangeRate(
     @Param('base') base: string,
     @Param('target') target: string,
     @Body() convertExchangeDto: ConvertExchangeDto
@@ -43,13 +47,14 @@ export class ExchangeController {
       convertExchangeDto
     );
     return {
-      msg: `Amount of ${base} to ${target}`,
+      msg: `Amount of ${base.toLocaleUpperCase()} to ${target.toLocaleUpperCase()}`,
       amount: result,
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('request/:base/:target')
-  async convertExchangeRate(
+  async requestExchangeRate(
     @Param('base') base: string,
     @Param('target') target: string,
   ) {
@@ -59,30 +64,9 @@ export class ExchangeController {
       target.toLocaleUpperCase()
     );
     return {
-      msg: `Rate of ${base} to ${target}`,
+      msg: `Rate of ${base.toLocaleUpperCase()} to ${target.toLocaleUpperCase()}`,
       rate: result,
     }
   }
 
-
-
-  @Get()
-  findAll() {
-    return this.exchangeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.exchangeService.findOne(+id);
-  }
-
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateExchangeDto: AddRateExchangeDto) {
-    return this.exchangeService.update(id, updateExchangeDto); 
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.exchangeService.remove(+id);
-  }
 }
