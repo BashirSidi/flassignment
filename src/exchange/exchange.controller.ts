@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { ExchangeService } from './exchange.service';
 import { CreateExchangeDto } from './dto/create-exchange.dto';
 import { AddRateExchangeDto } from './dto/add-rate-exchange.dto';
+import { ConvertExchangeDto } from './dto/convert-exchange.dto';
 
 @Controller('exchange')
 export class ExchangeController {
@@ -28,6 +29,42 @@ export class ExchangeController {
       result: result
     }
   }
+
+  @Get('convert/:base/:target')
+  async requestExchangeRate(
+    @Param('base') base: string,
+    @Param('target') target: string,
+    @Body() convertExchangeDto: ConvertExchangeDto
+  ) {
+
+    const result = await this.exchangeService.convertExchangeRate(
+      base.toLocaleUpperCase(),
+      target.toLocaleUpperCase(),
+      convertExchangeDto
+    );
+    return {
+      msg: `Amount of ${base} to ${target}`,
+      amount: result,
+    }
+  }
+
+  @Get('request/:base/:target')
+  async convertExchangeRate(
+    @Param('base') base: string,
+    @Param('target') target: string,
+  ) {
+
+    const result = await this.exchangeService.requestExchangeRate(
+      base.toLocaleUpperCase(),
+      target.toLocaleUpperCase()
+    );
+    return {
+      msg: `Rate of ${base} to ${target}`,
+      rate: result,
+    }
+  }
+
+
 
   @Get()
   findAll() {

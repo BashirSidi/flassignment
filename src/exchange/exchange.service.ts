@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateExchangeDto } from './dto/create-exchange.dto';
 import { AddRateExchangeDto } from './dto/add-rate-exchange.dto';
 import { ExchangeDocument } from './exchange.model';
-import { BehaviorSubject } from 'rxjs';
+import { ConvertExchangeDto } from './dto/convert-exchange.dto';
 
 @Injectable()
 export class ExchangeService {
@@ -43,6 +43,47 @@ export class ExchangeService {
     
     return res;
   }
+
+  
+  async convertExchangeRate(
+    baseCurrency: string,
+    targetCurrency: string,
+    convertExchangeDto: ConvertExchangeDto): Promise<any>
+  {
+  const base = baseCurrency;
+  let data = await this.exchangeModel.findOne({ base })
+
+  if (!data) {
+    throw new BadRequestException('Unknown base currency value');
+  }
+
+  let obj = data.rates.find(r => r.target === targetCurrency);
+
+  if (!obj) {
+    throw new BadRequestException('Unknown target currency value');
+  }
+    
+  return Number(obj.rate) * Number(convertExchangeDto.amount);
+
+}
+
+  async requestExchangeRate(baseCurrency: string, targetCurrency: string): Promise<any>{
+  const base = baseCurrency;
+  let data = await this.exchangeModel.findOne({ base })
+
+  if (!data) {
+    throw new BadRequestException('Unknown base currency value');
+  }
+
+  let obj = data.rates.find(r => r.target === targetCurrency);
+
+  if (!obj) {
+    throw new BadRequestException('Unknown target currency value');
+  }
+    
+    return obj.rate;
+
+}
 
   findAll() {
     return `This action returns all exchange`;
