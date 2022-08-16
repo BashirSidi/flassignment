@@ -1,5 +1,3 @@
-
-
   <h1 align="center">Bashir Salisu Sidi <a href="https://www.frozenlogic.net/" target="_blank">FrozenLogic</a> Assignment.</h1>
     <p align="center">
 
@@ -7,6 +5,7 @@
 
 Simple service in NestJS that manages currency exchange rates.
 The service expose a RESTful API (clearly documented) that allows clients to:
+
 - add exchange rates between two currencies
 - request exchange rates between two currencies at any moment in time
 - provides an endpoint to convert a value from one currency to another at any moment in time
@@ -14,9 +13,8 @@ The service expose a RESTful API (clearly documented) that allows clients to:
 ## Swagger Docs Link
 
 ```bash
-$ swagger link goes here... (after deployment)
+$ http://localhost:3000/swagger#/
 ```
-
 
 ## Stay in touch
 
