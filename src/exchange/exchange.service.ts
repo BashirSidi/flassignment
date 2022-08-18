@@ -58,21 +58,29 @@ export class ExchangeService {
 }
 
   async requestExchangeRate(baseCurrency: string, targetCurrency: string): Promise<any>{
-  const base = baseCurrency;
-  let data = await this.exchangeModel.findOne({ base })
+    if (
+      typeof (baseCurrency) !== 'string' ||
+      typeof (targetCurrency) !== 'string' ||
+      baseCurrency.length !== 3 ||
+      targetCurrency.length !== 3
+    ) {
+      throw new BadRequestException('Unknown base currency value');
+    }
+    const base = baseCurrency;
+    let data = await this.exchangeModel.findOne({ base })
 
-  if (!data) {
-    throw new BadRequestException('Unknown base currency value');
-  }
+    if (!data) {
+      throw new BadRequestException('Unknown base currency value');
+    }
 
-  let obj = data.rates.find(r => r.target === targetCurrency);
+    let obj = data.rates.find(r => r.target === targetCurrency);
 
-  if (!obj) {
-    throw new BadRequestException('Unknown target currency value');
-  }
-    
-    return obj.rate;
+    if (!obj) {
+      throw new BadRequestException('Unknown target currency value');
+    }
+      
+      return obj.rate;
 
-  }
+    }
 
 }

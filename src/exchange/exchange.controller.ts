@@ -50,9 +50,20 @@ export class ExchangeController {
       target.toLocaleUpperCase(),
       convertExchangeDto
     );
+
+    const d = new Date();
+    const dd = d.getDate();
+    const mm = d.getMonth();
+    const yyyy = d.getFullYear();
+    const hh = d.getHours();
+    const m =  d.getMinutes();
+    const s = d.getSeconds()
+    const currTime = `${dd}/${mm}/${yyyy} - ${hh}:${m}:${s}`;
+
     return {
       msg: `Amount of ${base.toLocaleUpperCase()} to ${target.toLocaleUpperCase()}`,
       amount: result,
+      atTime: currTime,
     }
   }
 
@@ -68,9 +79,20 @@ export class ExchangeController {
       base.toLocaleUpperCase(),
       target.toLocaleUpperCase()
     );
+
+    const d = new Date();
+    const dd = d.getDate();
+    const mm = d.getMonth();
+    const yyyy = d.getFullYear();
+    const hh = d.getHours();
+    const m =  d.getMinutes();
+    const s = d.getSeconds()
+
+    const currTime = `${dd}/${mm}/${yyyy} - ${hh}:${m}:${s}`;
     return {
       msg: `Rate of ${base.toLocaleUpperCase()} to ${target.toLocaleUpperCase()}`,
       rate: result,
+      atTime: currTime,
     }
   }
 
